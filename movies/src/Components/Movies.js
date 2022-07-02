@@ -10,6 +10,7 @@ export default class Movies extends Component {
             parr:[1],
             currPage:1,
             movies:[],
+            favorites:[]
         }
     }
     //f4555560038c11354538dda52d874a6a
@@ -29,10 +30,15 @@ export default class Movies extends Component {
         // console.log("mount done");
         const res = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=f4555560038c11354538dda52d874a6a&language=en-US&page=${this.state.currPage}`);
         let data = res.data;
-        console.log(data);
+        // console.log(data);
+        let temp =[];
+        let farr = JSON.parse(localStorage.getItem('movies')||"[]");
+        temp = farr.map((m)=>{return m.id});
         this.setState({
-            movies:[...data.results],  
+            movies:[...data.results],
+            favorites:[...temp]
         })
+       
     }
     changeMovies = async()=>{
         // console.log(this.state.currPage);
@@ -67,8 +73,33 @@ export default class Movies extends Component {
                 currPage:value
             },this.changeMovies)
     }
+    handleFavorites=(movie)=>{
+        let oldData = JSON.parse( localStorage.getItem('movies') || "[]");
+        // console.log(movie);
+        if(this.state.favorites.includes(movie.id)){
+            oldData = oldData.filter((m)=>{
+                return m.id!=movie.id;
+            })
+        }
+        else{
+            oldData.push(movie);
+        }
+        localStorage.setItem("movies", JSON.stringify(oldData));
+        // console.log(oldData);
+        this.handleFavoritesStates()
+    }
+    handleFavoritesStates = ()=>{
+        let oldData = JSON.parse( localStorage.getItem('movies') || "[]");
+        // console.log(oldData)
+        let temp = oldData.map((m)=>{ return m.id});
+        this.setState({
+            favorites:[...temp]
+        })
+        console.log(this.state.favorites)
+    }
   render() {
     // let movie = movies.results;
+    console.log(this.state.favorites)
     return (
         <>
         {
@@ -86,8 +117,10 @@ export default class Movies extends Component {
                         <h2 className="card-title movies-title">{movieObj.original_title}</h2>
                         <div className="button-wrapper">
                             {
-                                this.state.hover===movieObj.id && <a className="btn btn-primary movies-button">
-                                    Add to Favorites
+                                this.state.hover===movieObj.id && <a className="btn btn-primary movies-button" onClick={()=>this.handleFavorites(movieObj)}>
+                                    {
+                                        this.state.favorites.includes(movieObj.id)?"Remove From Favorites":"Add to Favorites"
+                                    }
                                     </a>
                             }
                         {/* </div> */}

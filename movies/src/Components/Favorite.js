@@ -7,22 +7,32 @@ export default class Favorite extends Component {
         super()
         this.state={
             genre:[],
-            currgen:'All Genre'
+            currgen:'All Genre',
+            Movies:[]
         }
     }
-  render() {
-    const movie = movies.results;
-    // console.log(movie)
+  componentDidMount(){
+    let data = JSON.parse(localStorage.getItem("movies") || "[]")
+    console.log(data);
+    let temp=[];
     let genreids = {28:'Action',12:'Adventure',16:'Animation',35:'Comedy',80:'Crime',99:'Documentary',18:'Drama',10751:'Family',14:'Fantasy',36:'History',
     27:'Horror',10402:'Music',9648:'Mystery',10749:'Romance',878:'Sci-Fi',10770:'TV',53:'Thriller',10752:'War',37:'Western'};
-    let temp=[];
-    movie.forEach((movieObj)=>{
+    data.forEach((movieObj)=>{
         if(!temp.includes(genreids[movieObj.genre_ids[0]])){
             console.log(genreids[movieObj.genre_ids[0]]);
             temp.push(genreids[movieObj.genre_ids[0]]);
         }
     })
     temp.unshift("All Genre");
+    this.setState({
+      Movies:[...data],
+      genre:[...temp]
+    })
+  }
+  render() {
+    let genreids = {28:'Action',12:'Adventure',16:'Animation',35:'Comedy',80:'Crime',99:'Documentary',18:'Drama',10751:'Family',14:'Fantasy',36:'History',
+    27:'Horror',10402:'Music',9648:'Mystery',10749:'Romance',878:'Sci-Fi',10770:'TV',53:'Thriller',10752:'War',37:'Western'};
+    
     return (
       <>
         <div className="main">
@@ -30,10 +40,10 @@ export default class Favorite extends Component {
             <div className="col-3 favorites-genre">
               <ul class="list-group">
                 {
-                    temp.map((genre)=>(
+                    this.state.genre.map((genre)=>(
                         this.state.currgen===genre?
                         <li className="list-group-item" style={{backgroundColor:"#3f51b5",color:'white',fontWeight:'bold'}}>{genre}</li>:
-                        <li className="list-group-item" style={{color:"#3f51b5",backgroundColor:'white'}}>{genre}</li>
+                        <li className="list-group-item" style={{color:"#3f51b5",backgroundColor:'white'}} onClick={()=>{this.changeGenre(genre)}}>{genre}</li>
 
                     ))
                 }
@@ -57,7 +67,7 @@ export default class Favorite extends Component {
                   </thead>
                   <tbody>
                     {
-                        movie.map((movieObj)=>(
+                        this.state.Movies.map((movieObj)=>(
                             <tr>
                             <td><img src={`https://image.tmdb.org/t/p/original${movieObj.backdrop_path}`} className="card-img-top" alt={movieObj.title} style={{width:'5rem',marginRight:'1rem'}} />{movieObj.original_title}</td>
                             <td>{genreids[movieObj.genre_ids[0]]}</td>

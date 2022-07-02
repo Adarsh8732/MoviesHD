@@ -4,14 +4,22 @@ import Navbar from './Components/Navbar';
 import Banner from './Components/Banner';
 import Movies from './Components/Movies';
 import Favorite from './Components/Favorite';
-
+import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 function App() {
   return (
     <>
-      <Navbar/>
-      {/* <Banner/>
-      <Movies/> */}
-      <Favorite/>
+      <Router>
+          <Navbar/>
+        <Routes>
+          <Route path='/' 
+          element={<><Banner/><Movies/></>}>
+          </Route>
+          <Route path='/favorites' element={<Favorite/>}></Route>
+          {/* <Banner/>
+          <Movies/> 
+          <Favorite/>*/}
+        </Routes>
+      </Router>
     </>
   );
 }

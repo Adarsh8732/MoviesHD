@@ -4,12 +4,12 @@ export default class Banner extends Component {
   render() {
     // console.log(movies)
     let movie = movies.results[0];
-    console.log(movie);
+    // console.log(movie);
     return (
       <>
         {movie === "" ? (
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         ) : (
           <div className="card banner-card">
