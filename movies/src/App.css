@@ -89,6 +89,13 @@
   display: flex;
   justify-content: center;
 }
+.favorites-genre{
+  padding: 3rem;
+}
+.favorites-table{
+  padding: 3rem;
+}
+
 @media  screen and (max-width:400px) {
   .banner-card{
     height: 30vh;

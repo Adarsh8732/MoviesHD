@@ -3,13 +3,15 @@ import './App.css';
 import Navbar from './Components/Navbar';
 import Banner from './Components/Banner';
 import Movies from './Components/Movies';
+import Favorite from './Components/Favorite';
 
 function App() {
   return (
     <>
       <Navbar/>
-      <Banner/>
-      <Movies/>
+      {/* <Banner/>
+      <Movies/> */}
+      <Favorite/>
     </>
   );
 }
